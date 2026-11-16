@@ -5,8 +5,8 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
-    "ios": { "supportsTablet": false },
-    "android": {},
+    "ios": { "supportsTablet": false, "bundleIdentifier": "com.migielaa.sunflowerroom" },
+    "android": { "package": "com.migielaa.sunflowerroom" },
     "web": { "output": "single" },
     "experiments": { "baseUrl": "/sunflower-room" }
   }
