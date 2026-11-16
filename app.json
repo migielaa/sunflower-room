@@ -1,0 +1,12 @@
+{
+  "expo": {
+    "name": "Sunflower Room",
+    "slug": "sunflower-room",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "ios": { "supportsTablet": false },
+    "android": {},
+    "web": {}
+  }
+}

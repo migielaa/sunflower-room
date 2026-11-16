@@ -1,0 +1,25 @@
+export const colors = {
+  bg: '#F8F6F1',
+  card: '#FFFFFF',
+  border: '#E8E4DA',
+  text: '#16162A',
+  muted: '#5E5E6E',
+  primary: '#3556C0',
+  inClass: '#3556C0',
+  notArrived: '#E5A55D',
+  pickedUp: '#8C8476',
+  absent: '#E3DFD6',
+  link: '#2F5BD0',
+  orangeBg: '#FBE9D8',
+  orangeFg: '#C0651A',
+  blueBg: '#E6EBFA',
+  greenBg: '#DDF0E6',
+  greenFg: '#1F6B4A',
+  purpleBg: '#EADCF3',
+  purpleFg: '#6B3A8C',
+  yellowBg: '#FBF0C4',
+  yellowFg: '#8A6A00',
+  badgeBg: '#C0651A',
+};
+
+export const radius = { card: 16, pill: 12 };
