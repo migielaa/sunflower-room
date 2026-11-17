@@ -1,9 +1,11 @@
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { Tab } from '../screens/TodayScreen';
 import { colors } from '../theme';
+
+export type Tab = 'today' | 'children' | 'requests' | 'teachers';
 
 const tabs: { key: Tab; label: string; icon: keyof typeof Ionicons.glyphMap; badge?: number }[] = [
   { key: 'today', label: 'Today', icon: 'sunny-outline' },
@@ -13,8 +15,9 @@ const tabs: { key: Tab; label: string; icon: keyof typeof Ionicons.glyphMap; bad
 ];
 
 export function TabBar({ active, onChange }: { active: Tab; onChange: (t: Tab) => void }) {
+  const insets = useSafeAreaInsets();
   return (
-    <View style={styles.bar}>
+    <View style={[styles.bar, { paddingBottom: 6 + insets.bottom }]}>
       {tabs.map((t) => {
         const on = t.key === active;
         return (

@@ -1,21 +1,17 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { AttendanceCard } from '../components/AttendanceCard';
 import { SectionHeader } from '../components/SectionHeader';
-import { TabBar } from '../components/TabBar';
 import { Avatar, Card, Divider, Pill } from '../components/ui';
 import { classroom, newRequests, requests, teacherNotes, teachers, totalRequests } from '../data';
 import { colors } from '../theme';
 
-export type Tab = 'today' | 'children' | 'requests' | 'teachers';
-
 export default function TodayScreen() {
-  const [tab, setTab] = useState<Tab>('today');
-
   return (
-    <View style={styles.root}>
+    <SafeAreaView style={styles.root} edges={['top']}>
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <Text style={styles.date}>{classroom.date}</Text>
         <View style={styles.titleRow}>
@@ -98,8 +94,7 @@ export default function TodayScreen() {
           ))}
         </Card>
       </ScrollView>
-      <TabBar active={tab} onChange={setTab} />
-    </View>
+    </SafeAreaView>
   );
 }
 
