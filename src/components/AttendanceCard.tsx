@@ -2,19 +2,23 @@ import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Card } from './ui';
-import { classroom } from '../data';
+import type { AttendanceCounts } from '../models';
 import { colors } from '../theme';
 
-const { counts, total } = classroom;
+type Props = {
+  counts: AttendanceCounts;
+  total: number;
+  updated: string;
+  onCheckIn?: () => void;
+};
 
-const legend = [
-  { label: 'In class', value: counts.inClass, color: colors.inClass },
-  { label: 'Picked up', value: counts.pickedUp, color: colors.pickedUp },
-  { label: 'Not arrived', value: counts.notArrived, color: colors.notArrived },
-  { label: 'Absent', value: counts.absent, color: colors.absent, outline: true },
-];
-
-export function AttendanceCard({ onCheckIn }: { onCheckIn?: () => void }) {
+export function AttendanceCard({ counts, total, updated, onCheckIn }: Props) {
+  const legend = [
+    { label: 'In class', value: counts.inClass, color: colors.inClass },
+    { label: 'Picked up', value: counts.pickedUp, color: colors.pickedUp },
+    { label: 'Not arrived', value: counts.notArrived, color: colors.notArrived },
+    { label: 'Absent', value: counts.absent, color: colors.absent, outline: true },
+  ];
   const segments = [
     { v: counts.inClass, c: colors.inClass },
     { v: counts.pickedUp, c: colors.pickedUp },
@@ -25,7 +29,7 @@ export function AttendanceCard({ onCheckIn }: { onCheckIn?: () => void }) {
     <Card style={styles.card}>
       <View style={styles.top}>
         <Text style={styles.title}>Children in class</Text>
-        <Text style={styles.updated}>Updated {classroom.updated}</Text>
+        <Text style={styles.updated}>Updated {updated}</Text>
       </View>
       <View style={styles.big}>
         <Text style={styles.bigNum}>{counts.inClass}</Text>

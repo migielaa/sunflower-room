@@ -9,6 +9,7 @@ import ChildrenScreen from './src/screens/ChildrenScreen';
 import RequestsScreen from './src/screens/RequestsScreen';
 import TeachersScreen from './src/screens/TeachersScreen';
 import { AppTabBar } from './src/components/AppTabBar';
+import { TodayProvider } from './src/data/TodayProvider';
 import type { Tab as TabName } from './src/components/TabBar';
 
 type RootTabParamList = Record<TabName, undefined>;
@@ -19,18 +20,20 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <StatusBar style="dark" />
-      <NavigationContainer>
-        <Tab.Navigator
-          initialRouteName="today"
-          screenOptions={{ headerShown: false }}
-          tabBar={(props) => <AppTabBar {...props} />}
-        >
-          <Tab.Screen name="today" component={TodayScreen} />
-          <Tab.Screen name="children" component={ChildrenScreen} />
-          <Tab.Screen name="requests" component={RequestsScreen} />
-          <Tab.Screen name="teachers" component={TeachersScreen} />
-        </Tab.Navigator>
-      </NavigationContainer>
+      <TodayProvider>
+        <NavigationContainer>
+          <Tab.Navigator
+            initialRouteName="today"
+            screenOptions={{ headerShown: false }}
+            tabBar={(props) => <AppTabBar {...props} />}
+          >
+            <Tab.Screen name="today" component={TodayScreen} />
+            <Tab.Screen name="children" component={ChildrenScreen} />
+            <Tab.Screen name="requests" component={RequestsScreen} />
+            <Tab.Screen name="teachers" component={TeachersScreen} />
+          </Tab.Navigator>
+        </NavigationContainer>
+      </TodayProvider>
     </SafeAreaProvider>
   );
 }
