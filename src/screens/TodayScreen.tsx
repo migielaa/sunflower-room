@@ -1,18 +1,32 @@
 import React from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { AttendanceCard } from '../components/AttendanceCard';
 import { SectionHeader } from '../components/SectionHeader';
+import { ErrorState, LoadingState } from '../components/ScreenState';
 import { Avatar, Card, Divider, Pill } from '../components/ui';
-import { classroom, newRequests, requests, teacherNotes, teachers, totalRequests } from '../data';
+import { useToday } from '../data/TodayProvider';
 import { colors } from '../theme';
 
 export default function TodayScreen() {
+  const { data, loading, error, refresh } = useToday();
+
+  if (!data) {
+    if (error) return <ErrorState message={error.message} onRetry={refresh} />;
+    return <LoadingState />;
+  }
+
+  const { classroom, alerts, teachers, teacherNotes, requests, requestsSummary } = data;
+
   return (
     <SafeAreaView style={styles.root} edges={['top']}>
-      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        contentContainerStyle={styles.content}
+        showsVerticalScrollIndicator={false}
+        refreshControl={<RefreshControl refreshing={loading} onRefresh={refresh} tintColor={colors.primary} />}
+      >
         <Text style={styles.date}>{classroom.date}</Text>
         <View style={styles.titleRow}>
           <Pressable style={styles.roomPicker}>
@@ -22,33 +36,31 @@ export default function TodayScreen() {
           <Avatar initials={classroom.userInitials} bg={colors.greenBg} fg={colors.greenFg} size={48} />
         </View>
 
-        <AttendanceCard />
+        <AttendanceCard counts={classroom.counts} total={classroom.total} updated={classroom.updated} />
 
         <SectionHeader label="Needs attention" />
         <Card>
-          <View style={styles.row}>
-            <View style={[styles.iconBox, { backgroundColor: colors.orangeBg }]}>
-              <Ionicons name="alert-circle-outline" size={24} color={colors.orangeFg} />
+          {alerts.map((a, i) => (
+            <View key={a.id}>
+              {i > 0 && <Divider />}
+              <View style={styles.row}>
+                <View style={[styles.iconBox, { backgroundColor: a.iconBg }]}>
+                  <Ionicons name={a.icon} size={24} color={a.iconFg} />
+                </View>
+                <View style={styles.flex}>
+                  <Text style={styles.rowTitle}>{a.title}</Text>
+                  <Text style={styles.rowSub}>{a.detail}</Text>
+                </View>
+                {a.action === 'message' ? (
+                  <Pressable style={styles.outlineBtn}>
+                    <Text style={styles.outlineBtnText}>Message</Text>
+                  </Pressable>
+                ) : (
+                  <Ionicons name="chevron-forward" size={20} color={colors.muted} />
+                )}
+              </View>
             </View>
-            <View style={styles.flex}>
-              <Text style={styles.rowTitle}>2 children not arrived</Text>
-              <Text style={styles.rowSub}>Isabella M. and Diego F. · no message from family</Text>
-            </View>
-            <Pressable style={styles.outlineBtn}>
-              <Text style={styles.outlineBtnText}>Message</Text>
-            </Pressable>
-          </View>
-          <Divider />
-          <Pressable style={styles.row}>
-            <View style={[styles.iconBox, { backgroundColor: colors.blueBg }]}>
-              <Ionicons name="medkit-outline" size={22} color={colors.primary} />
-            </View>
-            <View style={styles.flex}>
-              <Text style={styles.rowTitle}>Leo's inhaler at 12:00</Text>
-              <Text style={styles.rowSub}>2 puffs before lunch · medication form on file</Text>
-            </View>
-            <Ionicons name="chevron-forward" size={20} color={colors.muted} />
-          </Pressable>
+          ))}
         </Card>
 
         <SectionHeader label="Teachers in class" actionLabel="See all" />
@@ -77,7 +89,11 @@ export default function TodayScreen() {
           </View>
         </Card>
 
-        <SectionHeader label="Special requests" badge={`${newRequests} new`} actionLabel={`All ${totalRequests}`} />
+        <SectionHeader
+          label="Special requests"
+          badge={`${requestsSummary.new} new`}
+          actionLabel={`All ${requestsSummary.total}`}
+        />
         <Card>
           {requests.map((r, i) => (
             <View key={r.initials}>
