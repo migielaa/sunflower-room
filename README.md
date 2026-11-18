@@ -21,6 +21,19 @@ site works as a read-only backend out of the box. Point `EXPO_PUBLIC_API_URL`
 at any backend returning the same shape (`src/models.ts → TodayData`) to swap it
 — a REST API, serverless function, Supabase/Firebase wrapper, etc.
 
+## Run with Docker (web)
+Builds the web export and serves it with nginx. Good for self-hosting the web
+app; native builds use EAS (below), not Docker.
+```
+docker build -t sunflower-room .
+docker run --rm -p 8080:80 sunflower-room
+```
+Then open http://localhost:8080 (it redirects to the `/sunflower-room/` base
+path from `app.json`). To bake in the HTTP backend, pass it at build time:
+```
+docker build --build-arg EXPO_PUBLIC_API_URL=https://your-backend -t sunflower-room .
+```
+
 ## Native builds (EAS)
 ```
 npm i -g eas-cli
