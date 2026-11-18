@@ -1,0 +1,11 @@
+.git
+.github
+node_modules
+dist
+web-build
+.expo
+*.log
+npm-debug.log*
+.DS_Store
+Dockerfile
+.dockerignore
