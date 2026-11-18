@@ -1,7 +1,7 @@
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
 
 import type { TodayData } from '../models';
-import { mockRepository } from './mockRepository';
+import { defaultRepository } from './defaultRepository';
 import type { ClassroomRepository } from './repository';
 
 type TodayState = {
@@ -15,7 +15,7 @@ const TodayContext = createContext<TodayState | undefined>(undefined);
 
 export function TodayProvider({
   children,
-  repository = mockRepository,
+  repository = defaultRepository,
 }: {
   children: React.ReactNode;
   repository?: ClassroomRepository;
