@@ -24,6 +24,25 @@ at any backend returning the same shape (`src/models.ts → TodayData`) to swap 
 ## Run with Docker (web)
 Builds the web export and serves it with nginx. Good for self-hosting the web
 app; native builds use EAS (below), not Docker.
+
+### Prebuilt image (GHCR)
+`.github/workflows/docker.yml` publishes `ghcr.io/migielaa/sunflower-room:latest`
+on every push to `master`.
+```
+docker pull ghcr.io/migielaa/sunflower-room:latest
+docker run -d --rm -p 8080:80 --name sunflower-room ghcr.io/migielaa/sunflower-room:latest
+```
+Open http://localhost:8080 (redirects to `/sunflower-room/`). Change the host
+port with `-p <port>:80`; stop with `docker stop sunflower-room`.
+
+If the pull is denied, the package is private: GitHub > Packages >
+sunflower-room > Package settings > Change visibility > Public (or
+`docker login ghcr.io` with a token that has `read:packages`).
+
+The published image uses the in-memory mock. To point it at a backend, build
+your own image with `EXPO_PUBLIC_API_URL` (below), since it is baked in at build time.
+
+### Build locally
 ```
 docker build -t sunflower-room .
 docker run --rm -p 8080:80 sunflower-room
